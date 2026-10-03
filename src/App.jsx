@@ -9,7 +9,8 @@ import Staff   from './pages/Staff'
 import Manager from './pages/Manager'
 
 function RequireAuth({ children, role }) {
-  const { currentUser } = useAuth()
+  const { currentUser, authLoading } = useAuth()
+  if (authLoading) return <div className="min-h-screen bg-gray-950" />
   if (!currentUser) return <Navigate to="/" replace />
   if (role === 'manager' && currentUser.role !== 'manager') {
     return <Navigate to="/staff" replace />

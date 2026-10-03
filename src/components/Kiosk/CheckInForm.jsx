@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { UtensilsCrossed, User, Phone, Users, ChevronDown } from 'lucide-react'
-import { restaurants } from '../../data/restaurants'
+import { User, Phone, Users, ChevronDown } from 'lucide-react'
+import { useTableContext } from '../../context/TableContext'
 
 const PARTY_SIZES = [1, 2, 3, 4, 5, 6, 7, 8]
 
 export default function CheckInForm({ onSubmit }) {
+  const { restaurants } = useTableContext()
   const [restaurantId, setRestaurantId] = useState('')
   const [name,         setName]         = useState('')
   const [phone,        setPhone]        = useState('')

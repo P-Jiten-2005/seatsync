@@ -43,17 +43,7 @@ npm run dev
 
 Open `http://localhost:5173` and log in with any restaurant + the credentials below.
 
-## Demo Credentials
-
-All five restaurants share the same passwords:
-
-| Role | Password |
-|---|---|
-| Manager | `manager1` |
-| Waiter 1 | `waiter1` |
-| Waiter 2 | `waiter2` |
-
-The **Golden Fork** (restaurant 1) loads with pre-populated seed data — occupied tables, a cleaning queue, and 3 customers waiting.
+**Kamat** (restaurant 1) loads with pre-populated seed data — occupied tables, a cleaning queue, and 3 customers waiting.
 
 ## Routes
 
