@@ -114,14 +114,6 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Demo hint */}
-        <div className="mt-4 bg-gray-900/50 border border-gray-800 rounded-xl p-4">
-          <p className="text-xs text-gray-500 font-medium mb-2">Demo credentials (Kamat)</p>
-          <div className="space-y-1 text-xs text-gray-600">
-            <p><span className="text-gray-500">Manager:</span> manager@kamat.com / Manager@123</p>
-            <p><span className="text-gray-500">Waiter:</span> waiter1@kamat.com / Waiter@123</p>
-          </div>
-        </div>
 
       </div>
     </div>

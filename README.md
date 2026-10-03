@@ -1,12 +1,12 @@
 # SeatSync
 
-A smart restaurant table management system built with React. Handles customer queue check-ins, real-time floor map tracking, automated table slot timers, and a manager analytics dashboard — all in-browser with no backend required.
+A smart restaurant table management system built with React and Supabase. Handles customer queue check-ins, real-time floor map tracking across tabs, automated table slot timers, and a manager analytics dashboard.
 
 ## Screenshots
 
 | Login | Staff Dashboard | Kiosk |
 |---|---|---|
-| Restaurant + role selector | Color-coded floor map with live timers | Customer self check-in |
+| Email + password | Color-coded floor map with live timers | Customer self check-in |
 
 | Display Board | Manager Dashboard | Analytics |
 |---|---|---|
@@ -17,10 +17,10 @@ A smart restaurant table management system built with React. Handles customer qu
 - **Floor Map** — 12 color-coded tables per restaurant (green / red / yellow / orange warning)
 - **Live Countdown Timers** — each booking is a rolling 1.5 hr slot; tables auto-move to "cleaning" when time expires
 - **Customer Queue** — kiosk check-in issues zero-padded tokens (`#001`); queue resets at midnight per restaurant
-- **TV Display** — public screen at `/display?r=r1` shows "Now Serving" and the full waiting queue
+- **TV Display** — public screen at `/display?r=<id>` shows "Now Serving" and the full waiting queue
 - **Role-Based Access** — waiters manage the floor; managers get session history, audit log, analytics, and timer overrides
 - **Audit Log** — every action (allocation, status change, auto-clean, timer override) is logged with actor and timestamp
-- **Demo Seed Data** — loads with a realistic mid-service state so the app feels live immediately
+- **Real-Time Sync** — changes made in one tab (token added from kiosk, table status updated) are reflected live in all other tabs via Supabase Realtime
 
 ## Tech Stack
 
@@ -32,26 +32,35 @@ A smart restaurant table management system built with React. Handles customer qu
 | **Icons** | lucide-react |
 | **Toasts** | react-hot-toast |
 | **State** | React Context (no Redux) |
-| **Backend** | None — all in-memory |
+| **Backend** | Supabase (Postgres + Auth + Realtime) |
 
 ## Getting Started
 
-```bash
-npm install
-npm run dev
-```
+1. Clone the repo and install dependencies:
+   ```bash
+   npm install
+   ```
 
-Open `http://localhost:5173` and log in with any restaurant + the credentials below.
+2. Create a `.env` file in the project root:
+   ```
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-**Kamat** (restaurant 1) loads with pre-populated seed data — occupied tables, a cleaning queue, and 3 customers waiting.
+3. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+
+Open `http://localhost:5173` and log in with your email and password.
 
 ## Routes
 
 | Route | Access | Description |
 |---|---|---|
-| `/` | Public | Login — restaurant picker, role toggle, password |
+| `/` | Public | Login — email + password |
 | `/kiosk` | Public | Customer self check-in; issues a queue token |
-| `/display?r=r1` | Public | TV queue board — "Now Serving" + waiting list |
+| `/display?r=<id>` | Public | TV queue board — "Now Serving" + waiting list |
 | `/staff` | Waiter / Manager | Floor map, queue panel, table actions |
 | `/manager` | Manager only | Floor + Sessions + Audit Log + Analytics + Table Settings |
 
@@ -71,8 +80,8 @@ Color coding: green (available) · red (occupied) · yellow (cleaning) · orange
 
 ```
 src/
-  data/           restaurants, tables, users, seed data
-  context/        AuthContext, TableContext (timer loop lives here)
+  lib/            supabase.js (client init)
+  context/        AuthContext, TableContext (timer loop + realtime subscriptions)
   pages/          Login, Kiosk, Display, Staff, Manager
   components/
     FloorMap/     FloorMap, TableCard
@@ -96,7 +105,7 @@ src/
 
 ## Notes
 
-- No backend — all state is React Context, seeded from `src/data/`. Refreshing the page resets to the demo state.
+- Auth is handled by Supabase — sessions persist across page refreshes.
 - Timer loop runs client-side every 30 seconds inside `TableContext`.
 - Token numbers are zero-padded integers scoped per restaurant, resetting at midnight.
 - The `reserved` status (blue in the color legend) is display-only — tokens assigned to a table show blue on the kiosk/display before the customer is seated.
