@@ -1,10 +1,10 @@
 import TableCard from './TableCard'
 
 const LEGEND = [
-  { color: 'bg-green-600',  label: 'Available' },
-  { color: 'bg-red-600',    label: 'Occupied'  },
-  { color: 'bg-yellow-600', label: 'Cleaning'  },
-  { color: 'bg-orange-500', label: 'Warning'   },
+  { color: '#A7F3D0', label: 'Available' },
+  { color: '#FCA5A5', label: 'Occupied'  },
+  { color: '#FDE68A', label: 'Sanitizing'},
+  { color: '#F97316', label: 'Warning'   },
 ]
 
 export default function FloorMap({ tables, tokens, selectedTableId, onSelectTable }) {
@@ -22,22 +22,25 @@ export default function FloorMap({ tables, tokens, selectedTableId, onSelectTabl
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Floor Map</h2>
-          <p className="text-xs text-gray-600 mt-0.5">
-            {available} available · {occupied} occupied · {cleaning} cleaning
+          <p className="text-[10px] font-bold tracking-widest uppercase"
+            style={{ color: '#9CA3AF' }}>Floor Map</p>
+          <p className="text-xs mt-0.5" style={{ color: '#6B7280' }}>
+            {available} available · {occupied} occupied · {cleaning} sanitizing
           </p>
         </div>
         <div className="hidden sm:flex items-center gap-3">
           {LEGEND.map(({ color, label }) => (
-            <span key={label} className="flex items-center gap-1 text-xs text-gray-500">
-              <span className={`w-2 h-2 rounded-full ${color} inline-block`} />
+            <span key={label} className="flex items-center gap-1 text-xs"
+              style={{ color: '#9CA3AF' }}>
+              <span className="w-2.5 h-2.5 rounded-sm inline-block shrink-0"
+                style={{ background: color }} />
               {label}
             </span>
           ))}
         </div>
       </div>
 
-      {/* Grid: 3 cols on mobile, 4 on sm+ */}
+      {/* Grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {tables.map(table => (
           <TableCard
@@ -45,7 +48,7 @@ export default function FloorMap({ tables, tokens, selectedTableId, onSelectTabl
             table={table}
             token={getToken(table)}
             isSelected={table.id === selectedTableId}
-            onClick={() => onSelectTable(table.id === selectedTableId ? null : table.id)}
+            onClick={() => onSelectTable(table.id)}
           />
         ))}
       </div>
